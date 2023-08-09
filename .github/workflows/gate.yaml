@@ -1,0 +1,18 @@
+name: Gate
+on:
+  pull_request:
+    types: [ labeled ]
+  issue_comment:
+    types: [ created ]
+jobs:
+  gate:
+    if: ${{ github.event.issue.pull_request }} &&
+        ${{ github.event_name == 'issue_comment' && github.event.comment.body == 'regate' }} ||
+        ${{ github.event.label.name == 'gate'}}
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      - run: echo ${{ github.event.issue.pull_request }}
+      - run: ${{ github.event_name == 'issue_comment' && github.event.comment.body == 'regate' }}
+      - run: ${{ github.event.label.name == 'gate'}}
