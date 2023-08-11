@@ -1,4 +1,5 @@
 // Import the client from the apolloClient.js file
+'use client'
 import client from './apolloClient'; // Update the path to the correct location
 import { gql } from '@apollo/client';
 import { NFTOwnedAdapter } from '@/adapter/Adapters';
