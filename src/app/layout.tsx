@@ -3,6 +3,9 @@ import { Inter } from 'next/font/google';
 import Sidebar from '@/components/Sidebar';
 import WalletConfig from '@/components/WalletConfig';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ApolloProvider } from '@apollo/client';
+import client from './apolloClient.js'; // Ensure the path points to your Apollo Client setup
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -16,20 +19,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <WalletConfig>
-          <div className="flex">
-            <Sidebar />
-            <main className="flex-grow bg-midnight p-4 pt-20 ">
-              <div className="absolute top-0 right-0 mt-4 mr-4">
-                <ConnectButton />
-              </div>
-              {children}
-            </main>
-          </div>
-        </WalletConfig>
-      </body>
-    </html>
+    <ApolloProvider client={client}>
+      <html lang="en">
+        <body className={inter.className}>
+          <WalletConfig>
+            <div className="flex">
+              <Sidebar />
+              <main className="flex-grow bg-midnight p-4 pt-20 ">
+                <div className="absolute top-0 right-0 mt-4 mr-4">
+                  <ConnectButton />
+                </div>
+                {children}
+              </main>
+            </div>
+          </WalletConfig>
+        </body>
+      </html>
+    </ApolloProvider>
   );
 }
