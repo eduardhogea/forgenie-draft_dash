@@ -18,23 +18,28 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ApolloProvider client={client}>
-      <html lang="en">
-        <body className={inter.className}>
-          <WalletConfig>
-            <div className="flex">
-              <Sidebar />
-              <main className="flex-grow bg-midnight p-4 pt-20 ">
-                <div className="absolute top-0 right-0 mt-4 mr-4">
-                  <ConnectButton />
-                </div>
-                {children}
-              </main>
-            </div>
-          </WalletConfig>
-        </body>
-      </html>
-    </ApolloProvider>
+  const content = (
+    <html lang="en">
+      <body className={inter.className}>
+        <WalletConfig>
+          <div className="flex">
+            <Sidebar />
+            <main className="flex-grow bg-midnight p-4 pt-20 ">
+              <div className="absolute top-0 right-0 mt-4 mr-4">
+                <ConnectButton />
+              </div>
+              {children}
+            </main>
+          </div>
+        </WalletConfig>
+      </body>
+    </html>
+  );
+
+  // Only wrap with ApolloProvider if on the client side
+  return typeof window !== 'undefined' && client ? (
+    <ApolloProvider client={client}>{content}</ApolloProvider>
+  ) : (
+    content
   );
 }

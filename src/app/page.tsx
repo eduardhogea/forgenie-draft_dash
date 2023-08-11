@@ -1,10 +1,10 @@
-// Import the client from the apolloClient.js file
 'use client'
 import { NFTOwnedAdapter } from '@/adapter/Adapters';
 import { EventWatcher } from '@/components/EventWatcher';
 import FunctionInputField from '@/components/FunctionInputField';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useQuery, gql } from '@apollo/client';
+import dynamic from 'next/dynamic';
 
 const GET_MINTED_DIAMONDS = gql`
   query GetMintedDiamonds {
@@ -18,11 +18,14 @@ const GET_MINTED_DIAMONDS = gql`
   }
 `;
 
-export function DashboardPage() {
+const DashboardComponent = () => {
   const { loading, error, data } = useQuery(GET_MINTED_DIAMONDS);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) {
+    console.error("Apollo Error:", error);
+    return <p>Error: {error.message}</p>;
+  }
 
   return (
     <div className="flex-grow p-8 bg-midnight text-white">
@@ -49,5 +52,10 @@ export function DashboardPage() {
     </div>
   );
 }
+
+const DashboardPage = dynamic(() => Promise.resolve(DashboardComponent), {
+  ssr: false,
+  loading: () => <p>Loading...</p>
+});
 
 export default DashboardPage;
