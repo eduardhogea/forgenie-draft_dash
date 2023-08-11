@@ -1,35 +1,28 @@
 // Import the client from the apolloClient.js file
 'use client'
-import client from './apolloClient'; // Update the path to the correct location
-import { gql } from '@apollo/client';
 import { NFTOwnedAdapter } from '@/adapter/Adapters';
 import { EventWatcher } from '@/components/EventWatcher';
 import FunctionInputField from '@/components/FunctionInputField';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
 
-const diamondsQuery = `
-  query {
-    diamonds {
-      id
-      address
+const GET_MINTED_DIAMONDS = gql`
+  query GetMintedDiamonds {
+    diamondMinteds {
+      tokenId
+      diamond
+      blockNumber
+      blockTimestamp
+      transactionHash
     }
   }
 `;
 
 export function DashboardPage() {
-  const [diamonds, setDiamonds] = useState([]);
+  const { loading, error, data } = useQuery(GET_MINTED_DIAMONDS);
 
-  useEffect(() => {
-    client
-      .query({
-        query: gql(diamondsQuery),
-      })
-      .then((data) => setDiamonds(data.data.diamonds))
-      .catch((err) => {
-        console.log('Error fetching data: ', err);
-      });
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="flex-grow p-8 bg-midnight text-white">
@@ -39,15 +32,15 @@ export function DashboardPage() {
         <Table className="min-w-full">
           <TableHead className="bg-[#3A2D6B]">
             <TableRow>
-              <TableCell className="p-4 text-white font-bold text-lg">ID</TableCell>
-              <TableCell className="p-4 text-white font-bold text-lg">Address</TableCell>
+              <TableCell className="p-4 text-white font-bold text-lg">Token ID</TableCell>
+              <TableCell className="p-4 text-white font-bold text-lg">Diamond Address</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className="bg-violet">
-            {diamonds.map((diamond, index) => (
-              <TableRow key={index} className="hover:bg-sapphire transition-all">
-                <TableCell className="p-4 text-white">{diamond.id}</TableCell>
-                <TableCell className="p-4 text-white">{diamond.address}</TableCell>
+            {data.diamondMinteds.map((diamond: any) => (
+              <TableRow key={diamond.tokenId} className="hover:bg-sapphire transition-all">
+                <TableCell className="p-4 text-white">{diamond.tokenId}</TableCell>
+                <TableCell className="p-4 text-white">{diamond.diamond}</TableCell>
               </TableRow>
             ))}
           </TableBody>
