@@ -1,8 +1,6 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
-const APIURL = 'https://api.studio.thegraph.com/query/contract/v0.0.1/';
-
-
+const APIURL = 'https://api.studio.thegraph.com/query/50950/contract/v0.1'
 
 const client = new ApolloClient({
   uri: APIURL,
