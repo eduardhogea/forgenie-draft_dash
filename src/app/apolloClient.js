@@ -1,7 +1,9 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
+/** @type {ApolloClient<InMemoryCache> | undefined} */
 let client;
+
 
 // Check if in development environment
 const isDev = process.env.NODE_ENV === 'development';
