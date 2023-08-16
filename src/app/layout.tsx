@@ -3,8 +3,6 @@ import { Inter } from 'next/font/google';
 import Sidebar from '@/components/Sidebar';
 import WalletConfig from '@/components/WalletConfig';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { ApolloProvider } from '@apollo/client';
-import client from './apolloClient.js'; // Ensure the path points to your Apollo Client setup
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const content = (
+  return (
     <html lang="en">
       <body className={inter.className}>
         <WalletConfig>
@@ -34,12 +32,5 @@ export default function RootLayout({
         </WalletConfig>
       </body>
     </html>
-  );
-
-  // Only wrap with ApolloProvider if on the client side
-  return typeof window !== 'undefined' && client ? (
-    <ApolloProvider client={client}>{content}</ApolloProvider>
-  ) : (
-    content
   );
 }
